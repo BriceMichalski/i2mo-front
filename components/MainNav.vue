@@ -12,23 +12,24 @@ import { cn } from '@/lib/utils'
     >
       I2mo
     </a>
-    <a
-      href="/examples/dashboard"
-      class="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
-    >
-        Mes biens
-    </a>
+
     <a
       href="/map"
       class="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
     >
         Map
     </a>
+    <!-- <a
+      href="/examples/dashboard"
+      class="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+    >
+        Mes biens
+    </a>
     <a
       href="/examples/dashboard"
       class="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
     >
       Settings
-    </a>
+    </a> -->
   </nav>
 </template>

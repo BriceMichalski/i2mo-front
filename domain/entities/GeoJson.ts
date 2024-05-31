@@ -1,7 +1,6 @@
 export interface GeoProperties {
     code: string
     nom: string
-    stats: Stats
 }
 
 export interface Stats {
