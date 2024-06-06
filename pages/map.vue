@@ -34,8 +34,10 @@ import type { GeoProperties,Stats } from '~/domain/entities/GeoJson';
 import { useToast } from '@/components/ui/toast/use-toast'
 import { useRoute } from 'vue-router';
 
+const config = useRuntimeConfig()
 const route = useRoute()
 const { toast } = useToast()
+
 const mapFullScreen = "col-span-5 z-0"
 const mapHalfScreen= "col-span-3 z-0"
 const statsHidden = "col-span-2 z-0 overflow-scroll"
@@ -78,7 +80,7 @@ watch(() => route.query, (newQuery) => {
 
 const handleGeoJsonFeatureClick = async (props :GeoProperties ) => {
 
-  const response =  await fetch('http://127.0.0.1:8080/api/stats?' + new URLSearchParams({
+  const response =  await fetch(config.public.apiUrl + '/api/stats?' + new URLSearchParams({
                       insee_code: props.code
                     }));
 

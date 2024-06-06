@@ -5,7 +5,8 @@
     </div>
     <div v-if="stats" class="flex justify-center statsArray">
         <Table>
-            <TableCaption>Mise à jours le: <br/><b>{{ formattedDate }}</b>
+            <TableCaption>
+              Basé sur <b>{{ stats.ads_count }}</b> {{ stats.ads_count > 1 ? "annonces" : "annonce" }} le <b>{{ formattedDate }}</b>
             </TableCaption>
             <TableHeader>
                 <TableRow>

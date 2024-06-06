@@ -28,12 +28,12 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { debounce } from 'lodash';
+import { debounce } from 'lodash-es';
 import type { GeoProperties } from '~/domain/entities/GeoJson';
 import { useToast } from '@/components/ui/toast/use-toast'
 import { useRoute } from 'vue-router'
 
-
+const config = useRuntimeConfig()
 const { toast } = useToast()
 type LatLng = [number, number];
 
@@ -58,7 +58,7 @@ onMounted( async () => {
   const long = route.query.long ? Number(route.query.long) : null
 
   if(lat != null && long != null){
-    const shiftedLong = long + 0.001;
+    const shiftedLong = long + 0.02;
     centerOn(lat,shiftedLong)
   } else {
     centerUser()
@@ -69,7 +69,7 @@ watch(() => route.query, (newQuery) => {
   const lat = newQuery.lat ? Number(newQuery.lat) : null
   const long = newQuery.long ? Number(newQuery.long) : null
   if(lat != null && long != null){
-    const shiftedLong = long + 0.001;
+    const shiftedLong = long + 0.02;
     centerOn(lat,shiftedLong)
   }
 })
@@ -113,7 +113,7 @@ const getGeoJson = async () => {
     const topLeft = bounds.getNorthWest();
     const bottomRight = bounds.getSouthEast();
 
-    const response =  await fetch('http://127.0.0.1:8080/api/geojson?' + new URLSearchParams({
+    const response =  await fetch( config.public.apiUrl + '/api/geojson?' + new URLSearchParams({
           tl_lat: topLeft.lat,
           tl_lon: topLeft.lng,
           br_lat: bottomRight.lat,

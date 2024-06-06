@@ -2,7 +2,7 @@
 import { useMagicKeys } from '@vueuse/core'
 import { MagnifyingGlassIcon } from '@radix-icons/vue';
 import { ref, watch } from 'vue'
-import { debounce } from 'lodash';
+import { debounce } from 'lodash-es';
 import type { GeoSearchResult, GeoJsonItem } from '~/domain/entities/Search';
 
 const open = ref(false)
