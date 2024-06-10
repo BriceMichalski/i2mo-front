@@ -14,6 +14,7 @@ const onScreenGeoProperties = ref<GeoProperties | null>(null)
 const onScreenData = ref<Record<string,Stats> | null>(null)
 
 watch(() => props.featureData, (newValue) => {
+  onScreenData.value = null
   if(newValue != null){
     onScreenData.value = newValue;
   }

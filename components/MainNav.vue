@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils'
       href="/"
       class="text-sm font-medium transition-colors hover:text-primary"
     >
-      I2mo
+      <img src="/img/logo.png" alt="Logo" class="h-8 w-28 mr-2">
     </a>
 
     <a
@@ -31,5 +31,11 @@ import { cn } from '@/lib/utils'
     >
       Settings
     </a> -->
+    <a
+      href="/about"
+      class="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+    >
+        A propos
+    </a>
   </nav>
 </template>

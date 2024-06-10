@@ -46,8 +46,8 @@ const mapCenter = ref<LatLng>([46, 2]);
 const targetCoords = ref<LatLng>([0, 0]);
 const targetZoom = 13;
 const factor = 0.8; // Adjust the increment as needed
-const interval = 200; // Milliseconds between each zoom increment
-
+const interval = 100; // Milliseconds between each zoom increment
+const currentDisplayedCode = ref("")
 
 const emit = defineEmits<{
   (e: 'geojson-feature-click', value: GeoProperties): void
@@ -56,9 +56,10 @@ const emit = defineEmits<{
 onMounted( async () => {
   const lat = route.query.lat ? Number(route.query.lat) : null
   const long = route.query.long ? Number(route.query.long) : null
+  currentDisplayedCode.value = route.query.code as string
 
   if(lat != null && long != null){
-    const shiftedLong = long + 0.02;
+    const shiftedLong = long + 0.04;
     centerOn(lat,shiftedLong)
   } else {
     centerUser()
@@ -68,8 +69,10 @@ onMounted( async () => {
 watch(() => route.query, (newQuery) => {
   const lat = newQuery.lat ? Number(newQuery.lat) : null
   const long = newQuery.long ? Number(newQuery.long) : null
+  currentDisplayedCode.value = route.query.code as string
+
   if(lat != null && long != null){
-    const shiftedLong = long + 0.02;
+    const shiftedLong = long + 0.04;
     centerOn(lat,shiftedLong)
   }
 })
@@ -94,11 +97,20 @@ const generateColor = (id: string) => {
 };
 
 const geoStyler = (feature: any) => {
-  const color = generateColor(feature.properties.code);
-  return {
-    color: color,
-    opacity: 0.09, // Exemple de valeur d'opacité
-  };
+  if(feature.properties.code != currentDisplayedCode.value){
+    const color = generateColor(feature.properties.code);
+    return {
+      color: color,
+      opacity: 0.09, // Exemple de valeur d'opacité
+    };
+  }
+    return {
+        fillColor: 'orange',
+        weight: 3,
+        opacity: 1,
+        color: 'red',  //Outline color
+        fillOpacity: 0.03
+    };
 };
 
 
@@ -157,7 +169,7 @@ const centerOn = (lat :number,long :number) => {
   targetCoords.value = [lat, long];
   const recenter = setInterval(() => {
     mapCenter.value = moveTowards(mapCenter.value, targetCoords.value, factor);
-    if(Math.abs(mapCenter.value[0] - targetCoords.value[0]) < 0.001 && Math.abs(mapCenter.value[1] - targetCoords.value[1]) < 0.001){
+    if(Math.abs(mapCenter.value[0] - targetCoords.value[0]) < 0.01 && Math.abs(mapCenter.value[1] - targetCoords.value[1]) < 0.01){
       clearInterval(recenter);
       zoomUser()
     }
@@ -182,8 +194,15 @@ const zoomUser = () => {
 
 
 
-const handleGeoJsonClick = (event: any) => {
+const handleGeoJsonClick = async (event: any) => {
+  await navigateTo({
+    query: {}
+  })
   emit('geojson-feature-click', event.layer.feature.properties);
+  currentDisplayedCode.value = event.layer.feature.properties.code;
+
+  const shiftedLong = event.latlng.lng + 0.04;
+  centerOn(event.latlng.lat,shiftedLong)
 };
 </script>
 

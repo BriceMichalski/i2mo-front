@@ -60,7 +60,7 @@ onMounted( async () => {
       "nom": city
     }
     closeStats()
-    handleGeoJsonFeatureClick(geoProperties)
+    fetchLocationData(geoProperties)
   }
 });
 
@@ -73,21 +73,26 @@ watch(() => route.query, (newQuery) => {
       "nom": city
     }
     closeStats()
-    handleGeoJsonFeatureClick(geoProperties)
+    fetchLocationData(geoProperties)
   }
 })
 
 
 const handleGeoJsonFeatureClick = async (props :GeoProperties ) => {
+  fetchLocationData(props)
+}
 
+
+const fetchLocationData = async (props :GeoProperties ) => {
+  featureData.value = null
   const response =  await fetch(config.public.apiUrl + '/api/stats?' + new URLSearchParams({
                       insee_code: props.code
                     }));
 
   const data = await response.json();
   const hasData = hasAtLeastOneNonNullValue(data)
-
   if(!hasData) {
+    closeStats()
     toast({
         variant: "destructive",
         title: 'Revenez plus tard !',
@@ -95,6 +100,7 @@ const handleGeoJsonFeatureClick = async (props :GeoProperties ) => {
       })
   }
   else {
+    closeStats()
     mapContainerClass.value = mapHalfScreen
     statsContainerClass.value = statsHalfScreen
     statsOnScreen.value = true
@@ -102,6 +108,8 @@ const handleGeoJsonFeatureClick = async (props :GeoProperties ) => {
     geoProperties.value = props
   }
 }
+
+
 
 function hasAtLeastOneNonNullValue(obj: Record<string, any>): boolean {
     return Object.values(obj).some(value => value !== null);
@@ -111,5 +119,7 @@ const closeStats = () => {
   mapContainerClass.value = mapFullScreen
   statsContainerClass.value = statsHidden
   statsOnScreen.value = false
+  featureData.value = null
+  geoProperties.value = null
 }
 </script>
