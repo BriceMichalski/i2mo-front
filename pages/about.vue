@@ -60,7 +60,7 @@
           <p class="text-gray-600 leading-loose text-justify">
             Avec i2mo, vous bénéficiez de <b>technologies innovantes</b> et d'un accompagnement personnalisé qui facilitent votre parcours d'investisseur immobilier.
             Nous aspirons à devenir le <b>partenaire de confiance</b> de chacun de nos clients, en offrant non seulement des <b>outils d'analyse avancés</b>,
-            mais aussi un service client exceptionnel. Notre vision est d'établir une relation durable avec nos clients, fondée sur la confiance et la transparence.
+            mais aussi des conseils personnalisés. Notre vision est d'établir une relation durable avec nos clients, fondée sur la confiance et la transparence.
           </p>
         </div>
       </div>

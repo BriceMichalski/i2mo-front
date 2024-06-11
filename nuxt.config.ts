@@ -1,7 +1,16 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  modules: ["@nuxtjs/tailwindcss", "shadcn-nuxt", "nuxt3-leaflet", "nuxt-lodash"],
+  modules: [
+    "@nuxtjs/tailwindcss",
+    "shadcn-nuxt",
+    "nuxt3-leaflet",
+    "nuxt-lodash",
+    "nuxt-gtag"
+  ],
+  gtag: {
+    id: 'G-BWBFQ7P0HR'
+  },
   shadcn: {
     /**
      * Prefix for all the imported component
