@@ -135,7 +135,7 @@ const getGeoJson = async () => {
     geojsondata.value = await response.json();
   };
 };
-const debouncedGetGeoJson = debounce(getGeoJson, 1000);
+const debouncedGetGeoJson = debounce(getGeoJson, 500);
 
 // TOAST MSG
 const toastMapTooBig = () => {
