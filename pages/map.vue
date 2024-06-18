@@ -9,7 +9,7 @@
   <ClientOnly>
     <section>
       <!-- Grid -->
-      <div class="grid h-screen grid-cols-5 z-0">
+      <div class="grid h-[calc(100vh-74px)] grid-cols-5 z-0">
         <!-- First column -->
         <div :class="mapContainerClass">
           <MapDisplay @geojson-feature-click="handleGeoJsonFeatureClick" />

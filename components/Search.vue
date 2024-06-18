@@ -73,7 +73,7 @@ watch(search, (v) => {
         role="combobox"
         :aria-expanded="open"
       >
-      <MagnifyingGlassIcon class="w-4 h-4 mr-2" /> <p>Rechercher une ville</p>
+      <MagnifyingGlassIcon class="w-4 h-4 mr-2" /> <p>Rechercher </p>
             <kbd
         class="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100 ml-3"
       ><span class="text-xs">⌘</span>J</kbd>

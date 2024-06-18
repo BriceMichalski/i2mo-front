@@ -1,13 +1,13 @@
 <template>
-  <div>
-    <nav class="mb-15">
-      <AppHeader />
-    </nav>
-    <section class="z-40">
+    <!-- <AppHeader /> -->
+
+    <div>
+      <Navigation class="z-20"/>
+    </div>
+    <section class="z-10 h-[calc(100vh-74px)]">
       <slot />
     </section>
 
-  </div>
 </template>
 
 <style>

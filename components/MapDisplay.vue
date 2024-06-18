@@ -1,5 +1,5 @@
 <template>
-  <div style="height:100%; width:100%">
+  <div class="h-[calc(100vh-74px)]" style="border-color: red;">
     <LMap
       ref="map"
       :zoom="zoom"
@@ -206,8 +206,3 @@ const handleGeoJsonClick = async (event: any) => {
 };
 </script>
 
-<style>
-body {
-  margin: 0;
-}
-</style>
