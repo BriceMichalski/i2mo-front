@@ -74,24 +74,6 @@
         <div class="relative left-[calc(50%-11rem)] aspect-[520/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#9089fc] to-[#1A7277] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]" style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"></div>
       </div>
 
-      <div class="mx-auto max-w-2xl py-12 sm:py-12 lg:py-14 top-10 z-50">
-        <div class="bg-white rounded-lg shadow-lg p-6 md:p-12 mb-12">
-          <h2 class="text-2xl font-semibold text-gray-800 mb-8 text-center text-primary">Qui est derrière ce projet ?</h2>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div class="team-member">
-            </div>
-            <div class="team-member">
-              <img class="w-full h-48 object-cover rounded-t-lg" src="public/img/pdp-brice.jpeg" alt="Team Member 1">
-              <div class="bg-gray-100 p-4 rounded-b-lg">
-                <h3 class="text-lg font-semibold text-gray-800">Brice</h3>
-                <p class="text-gray-600">Créateur  Développeur</p>
-              </div>
-            </div>
-            <div class="team-member">
-            </div>
-          </div>
-        </div>
-      </div>
 
       <div class="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]" aria-hidden="true">
         <div class="relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-[#1A7277] to-[#9089fc] opacity-30 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]" style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"></div>

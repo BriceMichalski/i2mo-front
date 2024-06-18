@@ -9,7 +9,7 @@
   <ClientOnly>
     <section>
       <!-- Grid -->
-      <div class="grid h-[calc(100vh-74px)] grid-cols-5 z-0">
+      <div class="grid h-[calc(100vh-64px)] grid-cols-5 z-0">
         <!-- First column -->
         <div :class="mapContainerClass">
           <MapDisplay @geojson-feature-click="handleGeoJsonFeatureClick" />
@@ -18,7 +18,7 @@
 
         <!-- Second column -->
         <div :class="statsContainerClass" v-if="statsOnScreen">
-          <LocationStatsDisplay @close-stats="closeStats" :featureData="featureData" :geoProperties="geoProperties" />
+          <StatsDisplay @close-stats="closeStats" :featureData="featureData" :geoProperties="geoProperties" />
         </div>
         <!-- Second column -->
       </div>

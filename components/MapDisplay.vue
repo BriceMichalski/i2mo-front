@@ -1,5 +1,5 @@
 <template>
-  <div class="h-[calc(100vh-74px)]" style="border-color: red;">
+  <div class="h-[calc(100vh-64px)]" style="border-color: red;">
     <LMap
       ref="map"
       :zoom="zoom"
@@ -117,7 +117,7 @@ const geoStyler = (feature: any) => {
 // FETCH GEOJSON DATA
 const getGeoJson = async () => {
   if(map.value != null) {
-    if(map.value.leafletObject.getZoom() < 12){
+    if(map.value.leafletObject.getZoom() < 11){
       debouncedtoastMapTooBig()
       return;
     }
