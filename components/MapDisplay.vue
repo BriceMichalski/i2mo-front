@@ -1,5 +1,5 @@
 <template>
-  <div class="h-[calc(100vh-64px)]" style="border-color: red;">
+  <div class="h-[calc(100vh-60px)]" >
     <LMap
       ref="map"
       :zoom="zoom"
@@ -22,18 +22,32 @@
         @click="handleGeoJsonClick"
       />
 
+      <LControl position="bottomleft">
+        <form class="max-w-sm mx-auto">
+          <select id="countries"
+                  v-model="calque"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <option value="zip_code">Code postale</option>
+            <option value="m2">Surface</option>
+            <option value="area_count">Nombre de pieces</option>
+            <option value="price">Prix</option>
+            <option value="price_m2">Prix / m2 </option>
+          </select>
+        </form>
+      </LControl>
     </LMap>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { debounce } from 'lodash-es';
+import { debounce, zip } from 'lodash-es';
 import type { GeoProperties } from '~/domain/entities/GeoJson';
 import { useToast } from '@/components/ui/toast/use-toast'
 import { useRoute } from 'vue-router'
 
 const config = useRuntimeConfig()
+
 const { toast } = useToast()
 type LatLng = [number, number];
 
@@ -85,7 +99,8 @@ const mapReady = () => {
 }
 
 // MAP COLOR & STYLE
-const generateColor = (id: string) => {
+
+const zipCodeColor = (id: string) => {
   let hash = 0;
   for (let i = 0; i < id.length; i++) {
     hash = id.charCodeAt(i) + ((hash << 5) - hash);
@@ -96,12 +111,85 @@ const generateColor = (id: string) => {
   return "#" + "00000".substring(0, 6 - color.length) + color;
 };
 
+const minValue = ref(0);
+const maxValue = ref(100);
+
+const calculateMinMaxValues = (geojsondata) => {
+  let min = Infinity;
+  let max = -Infinity;
+
+  geojsondata.features.forEach(feature => {
+    const value = feature.properties.added_field;
+    if (value !== undefined) {
+      if (value < min) min = value;
+      if (value > max) max = value;
+    }
+  });
+
+  return { min, max };
+};
+
+watch(geojsondata, (newData) => {
+  if (newData) {
+    const { min, max } = calculateMinMaxValues(newData);
+    minValue.value = min;
+    maxValue.value = max;
+  }
+});
+
+const heatMap = (value: number) => {
+  // Convert value to a percentage (0 to 1)
+  const percentage = Math.min(Math.max(value, 0), 1);
+
+  // Interpolate between blue and red
+  const r = Math.floor(255 * percentage);
+  const g = Math.floor(255 * (1 - percentage));
+  const b = 0;
+
+  return `rgb(${r},${g},${b})`;
+};
+
+
+const calque = ref('zip_code');
+const calqueToFctMap = {
+  "zip_code": zipCodeColor,
+  "m2": heatMap,
+  "area_count": heatMap,
+  "price": heatMap,
+  "price_m2": heatMap,
+}
+
+watch(() => calque.value, (newValue) => {
+  getGeoJson()
+})
+
+
 const geoStyler = (feature: any) => {
   if(feature.properties.code != currentDisplayedCode.value){
-    const color = generateColor(feature.properties.code);
+    const styleFunction = calqueToFctMap[calque.value];
+    var color;
+
+    if (calque.value === 'zip_code') {
+      color = styleFunction(feature.properties.code);
+    }
+    else {
+      const value = feature.properties["added_field"];
+      if (value !== undefined) {
+        // Normalisez la valeur en utilisant une plage appropriée (ici 0 à 1)
+        // Vous devrez peut-être ajuster cette partie en fonction de vos données réelles
+        const normalizedValue = (value - minValue.value) / (maxValue.value - minValue.value);
+        color = styleFunction(normalizedValue);
+      } else {
+        color = 'darkgray'; // Couleur par défaut si aucune donnée
+      }
+    }
+
     return {
-      color: color,
-      opacity: 0.09, // Exemple de valeur d'opacité
+      fillColor: color,
+      color: '#000000',  // Bordure noire pour un meilleur contraste
+      weight: 1,         // Épaisseur de la bordure
+      opacity: 1,
+      fillOpacity: 0.5,  // Augmenter l'opacité de remplissage
     };
   }
     return {
@@ -125,12 +213,18 @@ const getGeoJson = async () => {
     const topLeft = bounds.getNorthWest();
     const bottomRight = bounds.getSouthEast();
 
-    const response =  await fetch( config.public.apiUrl + '/api/geojson?' + new URLSearchParams({
+    var uri = config.public.apiUrl + '/api/geojson?' + new URLSearchParams({
           tl_lat: topLeft.lat,
           tl_lon: topLeft.lng,
           br_lat: bottomRight.lat,
           br_lon: bottomRight.lng,
-        }));
+        })
+
+    if(calque.value != 'zip_code'){
+      uri += '&add_field=' + calque.value
+    }
+
+    const response =  await fetch(uri);
 
     geojsondata.value = await response.json();
   };
@@ -191,7 +285,6 @@ const zoomUser = () => {
       }
   }, interval);
 }
-
 
 
 const handleGeoJsonClick = async (event: any) => {
