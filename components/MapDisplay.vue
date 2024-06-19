@@ -29,7 +29,6 @@
                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             <option value="zip_code">Code postale</option>
             <option value="m2">Surface</option>
-            <option value="area_count">Nombre de pieces</option>
             <option value="price">Prix</option>
             <option value="price_m2">Prix / m2 </option>
           </select>
@@ -40,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { defineProps, ref } from 'vue';
 import { debounce, zip } from 'lodash-es';
 import type { GeoProperties } from '~/domain/entities/GeoJson';
 import { useToast } from '@/components/ui/toast/use-toast'
@@ -62,6 +61,17 @@ const targetZoom = 13;
 const factor = 0.8; // Adjust the increment as needed
 const interval = 100; // Milliseconds between each zoom increment
 const currentDisplayedCode = ref("")
+
+const props = defineProps<{
+  statsOnScreen: boolean ;
+}>()
+
+watch(() => props.statsOnScreen, async(newValue) => {
+  if(newValue == false){
+    currentDisplayedCode.value = ""
+    debouncedGetGeoJson()
+  }
+})
 
 const emit = defineEmits<{
   (e: 'geojson-feature-click', value: GeoProperties): void
@@ -118,13 +128,19 @@ const calculateMinMaxValues = (geojsondata) => {
   let min = Infinity;
   let max = -Infinity;
 
-  geojsondata.features.forEach(feature => {
-    const value = feature.properties.added_field;
-    if (value !== undefined) {
-      if (value < min) min = value;
-      if (value > max) max = value;
+  if (calque.value != 'zip_code') {
+    geojsondata.features.forEach(feature => {
+      const add_field = feature.properties.added_field;
+      if (add_field != undefined) {
+        const value = feature.properties.added_field.mean;
+        if (value != undefined) {
+          if (value < min) min = value;
+          if (value > max) max = value;
+        }
+
+      }
     }
-  });
+  )};
 
   return { min, max };
 };
@@ -138,13 +154,14 @@ watch(geojsondata, (newData) => {
 });
 
 const heatMap = (value: number) => {
-  // Convert value to a percentage (0 to 1)
-  const percentage = Math.min(Math.max(value, 0), 1);
+  // Apply a power function to exaggerate the extremes
+  const power = 0.6; // Adjust this value to control the steepness
+  const percentage = Math.pow(value, power);
 
   // Interpolate between blue and red
   const r = Math.floor(255 * percentage);
   const g = Math.floor(255 * (1 - percentage));
-  const b = 0;
+  const b = 100;
 
   return `rgb(${r},${g},${b})`;
 };
@@ -165,7 +182,8 @@ watch(() => calque.value, (newValue) => {
 
 
 const geoStyler = (feature: any) => {
-  if(feature.properties.code != currentDisplayedCode.value){
+  const code = feature.properties.code + "-" +feature.properties.zip
+  if(code != currentDisplayedCode.value){
     const styleFunction = calqueToFctMap[calque.value];
     var color;
 
@@ -173,12 +191,15 @@ const geoStyler = (feature: any) => {
       color = styleFunction(feature.properties.code);
     }
     else {
-      const value = feature.properties["added_field"];
-      if (value !== undefined) {
-        // Normalisez la valeur en utilisant une plage appropriée (ici 0 à 1)
-        // Vous devrez peut-être ajuster cette partie en fonction de vos données réelles
-        const normalizedValue = (value - minValue.value) / (maxValue.value - minValue.value);
-        color = styleFunction(normalizedValue);
+      const added_field = feature.properties["added_field"];
+      if (added_field !== undefined && added_field["count"] > 2 ) {
+        const value = feature.properties["added_field"]["mean"];
+        if (value !== undefined) {
+          // Normalisez la valeur en utilisant une plage appropriée (ici 0 à 1)
+          // Vous devrez peut-être ajuster cette partie en fonction de vos données réelles
+          const normalizedValue = (value - minValue.value) / (maxValue.value - minValue.value);
+          color = styleFunction(normalizedValue);
+        }
       } else {
         color = 'darkgray'; // Couleur par défaut si aucune donnée
       }
@@ -186,10 +207,10 @@ const geoStyler = (feature: any) => {
 
     return {
       fillColor: color,
-      color: '#000000',  // Bordure noire pour un meilleur contraste
+      color: 'gray',  // Bordure noire pour un meilleur contraste
       weight: 1,         // Épaisseur de la bordure
-      opacity: 1,
-      fillOpacity: 0.5,  // Augmenter l'opacité de remplissage
+      opacity: 0.8,
+      fillOpacity: 0.3,  // Augmenter l'opacité de remplissage
     };
   }
     return {
@@ -197,7 +218,7 @@ const geoStyler = (feature: any) => {
         weight: 3,
         opacity: 1,
         color: 'red',  //Outline color
-        fillOpacity: 0.03
+        fillOpacity: 0.1
     };
 };
 
@@ -292,8 +313,9 @@ const handleGeoJsonClick = async (event: any) => {
     query: {}
   })
   emit('geojson-feature-click', event.layer.feature.properties);
-  currentDisplayedCode.value = event.layer.feature.properties.code;
-
+  const code = event.layer.feature.properties.code + "-" + event.layer.feature.properties.zip
+  currentDisplayedCode.value = code;
+  console.log(code)
   const shiftedLong = event.latlng.lng + 0.04;
   centerOn(event.latlng.lat,shiftedLong)
 };

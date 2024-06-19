@@ -33,6 +33,7 @@ onMounted(() => {
         onScreenGeoProperties.value = props.geoProperties
     }
   })
+
 </script>
 
 <template>
@@ -41,7 +42,7 @@ onMounted(() => {
         <ChevronRightIcon class="w-4 h-4" />
     </Button>
     <div class="flex justify-center statsTitle">
-        <h2>Statistiques pour <b>{{ onScreenGeoProperties.nom }}</b></h2>
+        <h2>Statistiques pour <b>{{ onScreenGeoProperties.name }}</b></h2>
     </div>
     <Separator />
     <div v-for="(value, name, index) in onScreenData">

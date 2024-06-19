@@ -12,7 +12,7 @@
       <div class="grid h-[calc(100vh-60px)] grid-cols-5 z-0">
         <!-- First column -->
         <div :class="mapContainerClass">
-          <MapDisplay @geojson-feature-click="handleGeoJsonFeatureClick" />
+          <MapDisplay @geojson-feature-click="handleGeoJsonFeatureClick" :statsOnScreen="statsOnScreen" />
         </div>
         <!-- First column -->
 
@@ -57,7 +57,7 @@ onMounted( async () => {
   if(inseeCode != null && city != null){
     const geoProperties :GeoProperties = {
       "code": inseeCode,
-      "nom": city
+      "name": city
     }
     closeStats()
     fetchLocationData(geoProperties)
@@ -65,12 +65,12 @@ onMounted( async () => {
 });
 
 watch(() => route.query, (newQuery) => {
-  const inseeCode = Array.isArray(newQuery.code) ? newQuery.code[0] : newQuery.code;
+  const zip_code = Array.isArray(newQuery.zip) ? newQuery.zip[0] : newQuery.zip;
   const city = Array.isArray(newQuery.city) ? newQuery.city[0] : newQuery.city;
-  if(inseeCode != null && city != null){
+  if(zip_code != null && city != null){
     const geoProperties :GeoProperties = {
-      "code": inseeCode,
-      "nom": city
+      "zip": zip_code,
+      "name": city
     }
     closeStats()
     fetchLocationData(geoProperties)
@@ -82,11 +82,11 @@ const handleGeoJsonFeatureClick = async (props :GeoProperties ) => {
   fetchLocationData(props)
 }
 
-
 const fetchLocationData = async (props :GeoProperties ) => {
   featureData.value = null
+
   const response =  await fetch(config.public.apiUrl + '/api/stats?' + new URLSearchParams({
-                      insee_code: props.code
+                      zip_code: props.zip
                     }));
 
   const data = await response.json();
@@ -108,7 +108,6 @@ const fetchLocationData = async (props :GeoProperties ) => {
     geoProperties.value = props
   }
 }
-
 
 
 function hasAtLeastOneNonNullValue(obj: Record<string, any>): boolean {

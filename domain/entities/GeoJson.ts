@@ -1,6 +1,7 @@
 export interface GeoProperties {
     code: string
-    nom: string
+    zip: string
+    name: string
 }
 
 export interface Stats {

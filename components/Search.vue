@@ -38,7 +38,7 @@ const clickedResult = async (item: GeoJsonItem) => {
     query: {
       long: item.geometry.coordinates[0],
       lat: item.geometry.coordinates[1],
-      code: item.properties.citycode,
+      code: item.properties.citycode + "-" + item.properties.postcode,
       city: item.properties.city
     }
   })
