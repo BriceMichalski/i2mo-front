@@ -39,9 +39,9 @@ const route = useRoute()
 const { toast } = useToast()
 
 const mapFullScreen = "col-span-5 z-0"
-const mapHalfScreen= "col-span-3 z-0"
-const statsHidden = "col-span-2 z-0 overflow-scroll"
-const statsHalfScreen = "col-span-2 z-0 overflow-scroll"
+const mapHalfScreen= "hidden md:block md:col-span-3"
+const statsHidden = "hidden"
+const statsHalfScreen = "overflow-scroll col-span-5 md:col-span-2 z-0"
 const mapContainerClass = ref(mapFullScreen)
 
 const statsContainerClass = ref(statsHidden)

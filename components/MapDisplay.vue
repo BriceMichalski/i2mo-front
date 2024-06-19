@@ -22,7 +22,7 @@
         @click="handleGeoJsonClick"
       />
 
-      <LControl position="bottomleft">
+      <LControl position="topright">
         <form class="max-w-sm mx-auto">
           <select id="countries"
                   v-model="calque"
