@@ -9,7 +9,7 @@
   <ClientOnly>
     <section>
       <!-- Grid -->
-      <div class="grid h-[calc(100vh-60px)] grid-cols-5 z-0">
+      <div class="grid h-[calc(100vh-60px)] grid-cols-5">
         <!-- First column -->
         <div :class="mapContainerClass">
           <MapDisplay @geojson-feature-click="handleGeoJsonFeatureClick" :statsOnScreen="statsOnScreen" />
@@ -39,7 +39,7 @@ const route = useRoute()
 const { toast } = useToast()
 
 const mapFullScreen = "col-span-5 z-0"
-const mapHalfScreen= "hidden md:block md:col-span-3"
+const mapHalfScreen= "hidden md:block md:col-span-3 z-0"
 const statsHidden = "hidden"
 const statsHalfScreen = "overflow-scroll col-span-5 md:col-span-2 z-0"
 const mapContainerClass = ref(mapFullScreen)
@@ -52,41 +52,41 @@ const geoProperties = ref<GeoProperties | null>(null)
 
 
 onMounted( async () => {
-  const inseeCode = Array.isArray(route.query.code) ? route.query.code[0] : route.query.code;
-  const city = Array.isArray(route.query.city) ? route.query.city[0] : route.query.city;
-  if(inseeCode != null && city != null){
-    const geoProperties :GeoProperties = {
-      "code": inseeCode,
-      "name": city
-    }
-    closeStats()
-    fetchLocationData(geoProperties)
-  }
+  handleRouteParamsSearch(route.query)
 });
 
 watch(() => route.query, (newQuery) => {
-  const zip_code = Array.isArray(newQuery.zip) ? newQuery.zip[0] : newQuery.zip;
-  const city = Array.isArray(newQuery.city) ? newQuery.city[0] : newQuery.city;
-  if(zip_code != null && city != null){
-    const geoProperties :GeoProperties = {
-      "zip": zip_code,
-      "name": city
-    }
-    closeStats()
-    fetchLocationData(geoProperties)
-  }
+  handleRouteParamsSearch(newQuery)
 })
 
+const handleRouteParamsSearch = (query :any) => {
+  const searchId =  query.code  as string;
+  if(searchId != null ){
+    const insee = searchId.split('-')[0]
+    const zip_code = searchId.split('-')[1]
+    const city = query.city  as string;
+    if(zip_code != null && city != null){
+      const geoProperties :GeoProperties = {
+        "code": insee,
+        "zip": zip_code,
+        "name": city
+      }
+      closeStats()
+      fetchLocationData(geoProperties)
+    }
+  }
+}
 
 const handleGeoJsonFeatureClick = async (props :GeoProperties ) => {
+  console.log(props)
   fetchLocationData(props)
 }
 
 const fetchLocationData = async (props :GeoProperties ) => {
   featureData.value = null
-
   const response =  await fetch(config.public.apiUrl + '/api/stats?' + new URLSearchParams({
-                      zip_code: props.zip
+                      zip_code: props.zip,
+                      insee_code: props.code
                     }));
 
   const data = await response.json();
@@ -100,12 +100,19 @@ const fetchLocationData = async (props :GeoProperties ) => {
       })
   }
   else {
-    closeStats()
-    mapContainerClass.value = mapHalfScreen
-    statsContainerClass.value = statsHalfScreen
-    statsOnScreen.value = true
-    featureData.value = data
-    geoProperties.value = props
+    const wantedCode = props.code + "-" + props.zip
+    const resultCode = data[props.zip].insee_code + "-" + data[props.zip].zip_code
+    console.log(data)
+    console.log("wanted  : " + wantedCode)
+    console.log("fetched : " + resultCode)
+    if(wantedCode == resultCode) {
+      closeStats()
+      mapContainerClass.value = mapHalfScreen
+      statsContainerClass.value = statsHalfScreen
+      statsOnScreen.value = true
+      featureData.value = data
+      geoProperties.value = props
+    }
   }
 }
 

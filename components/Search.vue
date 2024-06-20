@@ -80,7 +80,7 @@ watch(search, (v) => {
     </Button>
 
     </p>
-    <CommandDialog :open="open" @update:open="handleOpenChange">
+    <CommandDialog :open="open" @update:open="handleOpenChange" class="z-50">
       <CommandInput v-model="search" placeholder="Entrer votre recherche ici ..." />
       <CommandList>
         <CommandEmpty v-if="search.length > 2" >No results found.</CommandEmpty>

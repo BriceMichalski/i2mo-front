@@ -1,5 +1,5 @@
 <template>
-  <div class="h-[calc(100vh-60px)]" >
+  <div class="h-[calc(100vh-60px)] -z-10" >
     <LMap
       ref="map"
       :zoom="zoom"
@@ -60,6 +60,7 @@ const targetCoords = ref<LatLng>([0, 0]);
 const targetZoom = 13;
 const factor = 0.8; // Adjust the increment as needed
 const interval = 100; // Milliseconds between each zoom increment
+const centerPrecision = 0.001
 const currentDisplayedCode = ref("")
 
 const props = defineProps<{
@@ -284,7 +285,7 @@ const centerOn = (lat :number,long :number) => {
   targetCoords.value = [lat, long];
   const recenter = setInterval(() => {
     mapCenter.value = moveTowards(mapCenter.value, targetCoords.value, factor);
-    if(Math.abs(mapCenter.value[0] - targetCoords.value[0]) < 0.01 && Math.abs(mapCenter.value[1] - targetCoords.value[1]) < 0.01){
+    if(Math.abs(mapCenter.value[0] - targetCoords.value[0]) < centerPrecision && Math.abs(mapCenter.value[1] - targetCoords.value[1]) < centerPrecision){
       clearInterval(recenter);
       zoomUser()
     }
