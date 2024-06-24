@@ -1,8 +1,5 @@
 <template>
 
-    <div v-if="stats" class="flex justify-center title">
-     <h3>{{  stats.zip_code }}</h3>
-    </div>
     <div v-if="stats" class="flex justify-center statsArray">
         <Table>
             <TableCaption>
@@ -90,11 +87,6 @@ const formattedDate = computed(() => {
 </script>
 
 <style>
-.title {
-  color: gray;
-  font-weight: bold;
-  margin-top: 2vh;
-}
 .statsArray{
     padding: 2vh 5vh 5vh 5vh;
 }

@@ -1,3 +1,34 @@
+<template>
+  <section v-if="onScreenGeoProperties">
+    <div class="flex items-center">
+      <Button variant="outline" size="icon" id="closeBtn" @click="$emit('close-stats')">
+        <ChevronRightIcon class="w-4 h-4" />
+      </Button>
+      <div class="justify-center statsTitle">
+          <h2><b>{{ onScreenGeoProperties.name }}</b> <span v-if="onScreenData">- {{ onScreenData.zip_code }}</span></h2>
+      </div>
+    </div>
+
+    <Separator />
+    <Tabs default-value="stats" class="mt-1 p-2">
+      <TabsList>
+        <TabsTrigger value="stats">
+          Statistiques
+        </TabsTrigger>
+        <TabsTrigger value="risk">
+          Risques
+        </TabsTrigger>
+      </TabsList>
+      <TabsContent value="stats">
+          <StatsArray :zip-stats="onScreenData"/>
+      </TabsContent>
+      <TabsContent value="risk">
+          <GeoRisk :insee="onScreenData?.insee_code"/>
+      </TabsContent>
+    </Tabs>
+  </section>
+</template>
+
 <script setup lang="ts">
 import { defineProps, ref } from 'vue';
 import type { GeoProperties,Stats } from '~/domain/entities/GeoJson';
@@ -11,7 +42,7 @@ const props = defineProps<{
 
 // Watch for changes in props.geoProperties and update onScreenGeoProperties accordingly
 const onScreenGeoProperties = ref<GeoProperties | null>(null)
-const onScreenData = ref<Record<string,Stats> | null>(null)
+const onScreenData = ref<Stats | null>(null)
 
 watch(() => props.featureData, (newValue) => {
   onScreenData.value = null
@@ -36,25 +67,11 @@ onMounted(() => {
 
 </script>
 
-<template>
-  <section v-if="onScreenGeoProperties">
-    <Button variant="outline" size="icon" id="closeBtn" @click="$emit('close-stats')">
-        <ChevronRightIcon class="w-4 h-4" />
-    </Button>
-    <div class="flex justify-center statsTitle">
-        <h2>Statistiques pour <b>{{ onScreenGeoProperties.name }}</b></h2>
-    </div>
-    <Separator />
-    <div v-for="(value, name, index) in onScreenData">
-      <StatsArray :zip-stats="value"/>
-    </div>
-
-  </section>
-</template>
 
 <style>
 .statsTitle{
-    margin: 1vh;
+    margin-left: 2vh;
+
     margin-top: 0vh;
 }
 

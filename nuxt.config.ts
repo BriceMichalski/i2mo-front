@@ -6,7 +6,8 @@ export default defineNuxtConfig({
     "shadcn-nuxt",
     "nuxt3-leaflet",
     "nuxt-lodash",
-    "nuxt-gtag"
+    "nuxt-gtag",
+    "@nuxt/icon"
   ],
   gtag: {
     id: 'G-BWBFQ7P0HR'

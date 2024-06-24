@@ -6,6 +6,7 @@ export interface GeoProperties {
 
 export interface Stats {
     zip_code: string
+    insee_code: string
     ads_count: number
     created_at: string
     m2: AttrStats

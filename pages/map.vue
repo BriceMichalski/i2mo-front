@@ -78,7 +78,6 @@ const handleRouteParamsSearch = (query :any) => {
 }
 
 const handleGeoJsonFeatureClick = async (props :GeoProperties ) => {
-  console.log(props)
   fetchLocationData(props)
 }
 
@@ -101,10 +100,7 @@ const fetchLocationData = async (props :GeoProperties ) => {
   }
   else {
     const wantedCode = props.code + "-" + props.zip
-    const resultCode = data[props.zip].insee_code + "-" + data[props.zip].zip_code
-    console.log(data)
-    console.log("wanted  : " + wantedCode)
-    console.log("fetched : " + resultCode)
+    const resultCode = data.insee_code + "-" + data.zip_code
     if(wantedCode == resultCode) {
       closeStats()
       mapContainerClass.value = mapHalfScreen

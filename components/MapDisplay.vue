@@ -27,7 +27,7 @@
           <select id="countries"
                   v-model="calque"
                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            <option value="zip_code">Code postale</option>
+            <option value="zip_code">Par défaut</option>
             <option value="m2">Surface</option>
             <option value="price">Prix</option>
             <option value="price_m2">Prix / m2 </option>
@@ -55,9 +55,12 @@ const geojsondata = ref()
 const map = ref<L.Map>()
 
 const zoom = ref(7);
+const minZoomGeojson = 11;
+const targetZoom = 11;
+
 const mapCenter = ref<LatLng>([46, 2]);
 const targetCoords = ref<LatLng>([0, 0]);
-const targetZoom = 13;
+
 const factor = 0.8; // Adjust the increment as needed
 const interval = 100; // Milliseconds between each zoom increment
 const centerPrecision = 0.001
@@ -227,7 +230,7 @@ const geoStyler = (feature: any) => {
 // FETCH GEOJSON DATA
 const getGeoJson = async () => {
   if(map.value != null) {
-    if(map.value.leafletObject.getZoom() < 11){
+    if(map.value.leafletObject.getZoom() < minZoomGeojson){
       debouncedtoastMapTooBig()
       return;
     }
@@ -255,12 +258,16 @@ const debouncedGetGeoJson = debounce(getGeoJson, 500);
 
 // TOAST MSG
 const toastMapTooBig = () => {
-  toast({
-        title: 'Carte trop grande',
-        description: 'La carte est trop grande pour afficher des données, veuillez zoomer sur une zone'
-      })
+  if(map.value != null) {
+    if(map.value.leafletObject.getZoom() < minZoomGeojson){
+      toast({
+            title: 'Carte trop grande',
+            description: 'La carte est trop grande pour afficher des données, veuillez zoomer sur une zone'
+          })
+    }
+  }
 }
-const debouncedtoastMapTooBig = debounce(toastMapTooBig, 5000);
+const debouncedtoastMapTooBig = debounce(toastMapTooBig, 2000);
 
 
 // MOVE MAP VIEW
@@ -296,12 +303,12 @@ const centerOn = (lat :number,long :number) => {
 const zoomUser = () => {
   // Start progressive zoom and recenter
   const zoomIn = setInterval(() => {
-      if (zoom.value < targetZoom) {
-        zoom.value += factor;
+      if (map.value.leafletObject.getZoom() < targetZoom) {
+        zoom.value += 1;
       }
 
       // Stop the interval when the zoom target is reached and the position is close enough
-      if (zoom.value >= targetZoom) {
+      if (map.value.leafletObject.getZoom() >= targetZoom) {
         clearInterval(zoomIn);
         getGeoJson()
       }
@@ -316,7 +323,6 @@ const handleGeoJsonClick = async (event: any) => {
   emit('geojson-feature-click', event.layer.feature.properties);
   const code = event.layer.feature.properties.code + "-" + event.layer.feature.properties.zip
   currentDisplayedCode.value = code;
-  console.log(code)
   const shiftedLong = event.latlng.lng + 0.04;
   centerOn(event.latlng.lat,shiftedLong)
 };
