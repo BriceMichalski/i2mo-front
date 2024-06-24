@@ -29,8 +29,8 @@
                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             <option value="zip_code">Par défaut</option>
             <option value="m2">Surface</option>
-            <option value="price">Prix</option>
-            <option value="price_m2">Prix / m2 </option>
+            <option value="price">Loyer</option>
+            <option value="price_m2">Loyer / m2 </option>
           </select>
         </form>
       </LControl>

@@ -20,10 +20,15 @@
         </TabsTrigger>
       </TabsList>
       <TabsContent value="stats">
+        <div v-if="onScreenData">
+          <ChartsNormalDistribution :mean="onScreenData.price_m2.mean" :stddev="onScreenData.price_m2.std"/>
           <StatsArray :zip-stats="onScreenData"/>
+        </div>
       </TabsContent>
       <TabsContent value="risk">
+        <div v-if="onScreenData" >
           <GeoRisk :insee="onScreenData?.insee_code"/>
+        </div>
       </TabsContent>
     </Tabs>
   </section>
