@@ -1,6 +1,6 @@
 <template>
     <div class="grid grid-cols-2" >
-        <div v-for="risk in displayedRisk" class="block col-span-2  lg:col-span-1 p-6 items-stretch " >
+        <div v-for="risk in displayedRisk" class="block col-span-2  lg:col-span-1 p-2 items-stretch " >
             <div class=" bg-white shadow-lg rounded-lg overflow-hidden">
                 <div class="flex items-center p-4 w-full">
                     <Icon :name="getIcon(risk.num_risque)" size="24" :class="getClass(risk.num_risque)"  />
