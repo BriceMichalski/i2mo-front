@@ -40,7 +40,7 @@ const setChartData = (xValues : number[],yValues : number[]) => {
     labels: xValues,
     datasets: [
       {
-        label: 'Distribution Normale des loyers au m2',
+        label: 'Densité de probabilité',
         data: yValues,
         borderColor: 'rgba(75, 192, 192, 1)',
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
