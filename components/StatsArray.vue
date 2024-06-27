@@ -8,10 +8,10 @@
             <TableHeader>
                 <TableRow>
                     <TableHead></TableHead>
+                    <TableHead class="text-center" >Loyer au m²</TableHead>
                     <TableHead class="text-center" >Nombre de piéces</TableHead>
-                    <TableHead class="text-center" >Surface(m2)</TableHead>
+                    <TableHead class="text-center" >Surface en m²</TableHead>
                     <TableHead class="text-center" >Loyer</TableHead>
-                    <TableHead class="text-center" >Loyer au m2</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
@@ -19,10 +19,10 @@
                 <TableCell class="font-medium text-right">
                 {{ name }}
                 </TableCell>
+                <TableCell>{{ stats.price_m2[labels].toFixed(2) }}</TableCell>
                 <TableCell>{{ stats.area_count[labels].toFixed(2) }}</TableCell>
                 <TableCell>{{ stats.m2[labels].toFixed(2) }}</TableCell>
                 <TableCell>{{ stats.price[labels].toFixed(2) }}</TableCell>
-                <TableCell>{{ stats.price_m2[labels].toFixed(2) }}</TableCell>
             </TableRow>
             </TableBody>
         </Table>
@@ -48,9 +48,9 @@ const labelsToKeep = {
     mean: 'Moyenne',
     min: 'Minimum',
     max: 'Maximun',
-    p25: '25 percentile',
-    p50: '50 percentile',
-    p75: '75 percentile',
+    p25: '1er quartile',
+    p50: 'Médiane',
+    p75: '3eme quartile',
     std: 'Écart type',
 };
 

@@ -13,7 +13,7 @@
         </div>
       </div> -->
       <div class="text-center inset-x-0 top-0 z-50">
-        <h1 class="text-4xl font-bold tracking-tight text-gray-700 sm:text-6xl">Des statistiques immobilieres à vos cotés</h1>
+        <h1 class="text-4xl font-bold tracking-tight text-primary sm:text-6xl">Des statistiques immobilieres à vos cotés</h1>
         <p class="mt-6 text-lg leading-8 text-gray-600">Prenez des décisions éclairées et maximisez vos investissements immobiliers grâce à notre analyse de données.</p>
         <div class=" inset-x-0 top-0 z-50 mt-10 flex items-center justify-center gap-x-6">
           <NuxtLink to="/map" class="relative rounded-md bg-secondary px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ">
