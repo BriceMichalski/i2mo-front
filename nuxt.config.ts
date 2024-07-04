@@ -7,7 +7,8 @@ export default defineNuxtConfig({
     "nuxt3-leaflet",
     "nuxt-lodash",
     "nuxt-gtag",
-    "@nuxt/icon"
+    "@nuxt/icon",
+    "@sidebase/nuxt-auth"
   ],
   gtag: {
     id: 'G-BWBFQ7P0HR'
@@ -51,4 +52,10 @@ export default defineNuxtConfig({
       ]
     }
   },
+  auth: {
+    provider: {
+      type: 'authjs',
+      addDefaultCallbackUrl: true
+    },
+  }
 })
